@@ -1,3 +1,5 @@
+// RHICH PORTFOLIO FUNCTIONS
+
 document.getElementById("year").textContent = new Date().getFullYear();
 
 const menuToggle = document.getElementById("menuToggle");
@@ -6,7 +8,6 @@ const nav = document.getElementById("nav");
 menuToggle.addEventListener("click", () => {
   const isOpen = nav.classList.toggle("open");
   menuToggle.setAttribute("aria-expanded", String(isOpen));
-  menuToggle.setAttribute("aria-label", isOpen ? "Close navigation" : "Open navigation");
   menuToggle.textContent = isOpen ? "✕" : "☰";
 });
 
@@ -14,13 +15,12 @@ nav.querySelectorAll("a").forEach(link => {
   link.addEventListener("click", () => {
     nav.classList.remove("open");
     menuToggle.setAttribute("aria-expanded", "false");
-    menuToggle.setAttribute("aria-label", "Open navigation");
     menuToggle.textContent = "☰";
   });
 });
 
-// Reveal sections gently as they enter the screen.
 const revealItems = document.querySelectorAll(".reveal");
+
 if ("IntersectionObserver" in window) {
   const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
@@ -30,32 +30,38 @@ if ("IntersectionObserver" in window) {
       }
     });
   }, { threshold: 0.12 });
+
   revealItems.forEach(item => observer.observe(item));
 } else {
   revealItems.forEach(item => item.classList.add("visible"));
 }
 
-// Optional light/dark theme switch. Dark is the default.
 const themeToggle = document.getElementById("themeToggle");
+
 themeToggle.addEventListener("click", () => {
   document.body.classList.toggle("light");
   const lightMode = document.body.classList.contains("light");
   themeToggle.textContent = lightMode ? "☾" : "☼";
-  themeToggle.setAttribute("aria-label", lightMode ? "Switch to dark theme" : "Switch to light theme");
 });
 
-// Copy the email address with a friendly confirmation.
 document.getElementById("copyEmail").addEventListener("click", async () => {
   const feedback = document.getElementById("copyFeedback");
+
   try {
     await navigator.clipboard.writeText("yeboahstephanie231@email.com");
     feedback.textContent = "Email address copied!";
   } catch {
-    feedback.textContent = "Please select and copy the email address above.";
+    feedback.textContent = "Please copy the email address above.";
   }
 });
-// RHICH PERSONAL CHAT ASSISTANT
+
+
+// RHICH AI CHATBOT
+
 (function () {
+
+  const AI_URL = "https://rhich-ai.yeboahstephanie231.workers.dev/";
+
   const style = document.createElement("style");
 
   style.textContent = `
@@ -78,9 +84,9 @@ document.getElementById("copyEmail").addEventListener("click", async () => {
       position: fixed;
       bottom: 90px;
       right: 25px;
-      width: 320px;
-      max-width: calc(100vw - 50px);
-      height: 400px;
+      width: 340px;
+      max-width: calc(100vw - 40px);
+      height: 430px;
       background: #101b16;
       color: white;
       border: 1px solid #00e676;
@@ -92,7 +98,7 @@ document.getElementById("copyEmail").addEventListener("click", async () => {
     }
 
     #rhich-chat-messages {
-      height: 275px;
+      height: 300px;
       overflow-y: auto;
       margin-bottom: 10px;
     }
@@ -118,6 +124,7 @@ document.getElementById("copyEmail").addEventListener("click", async () => {
       border-radius: 10px;
       margin: 8px 0;
       font-size: 13px;
+      line-height: 1.5;
     }
   `;
 
@@ -131,15 +138,22 @@ document.getElementById("copyEmail").addEventListener("click", async () => {
   box.id = "rhich-chat-box";
 
   box.innerHTML = `
-    <h3>🤖 RHICH Assistant</h3>
+    <h3>🤖 RHICH AI Assistant</h3>
+
     <div id="rhich-chat-messages">
       <div class="rhich-message">
-        Hello! Welcome to RHICH. I'm Stephanie's virtual assistant.
-        Ask me about her skills, projects or career interests!
+        Hello! 👋 Welcome to RHICH AI.
+        Ask me anything about technology, programming,
+        cybersecurity, graphic design or Stephanie!
       </div>
     </div>
+
     <form id="rhich-chat-form">
-      <input id="rhich-chat-input" placeholder="Ask me something..." required>
+      <input
+        id="rhich-chat-input"
+        placeholder="Ask me something..."
+        required
+      >
       <button type="submit">Send</button>
     </form>
   `;
@@ -147,52 +161,92 @@ document.getElementById("copyEmail").addEventListener("click", async () => {
   document.body.appendChild(button);
   document.body.appendChild(box);
 
-  button.addEventListener("click", function () {
+  button.addEventListener("click", () => {
     box.style.display =
       box.style.display === "block" ? "none" : "block";
   });
 
   const messages = box.querySelector("#rhich-chat-messages");
+  const form = box.querySelector("#rhich-chat-form");
+  const input = box.querySelector("#rhich-chat-input");
 
-  box.querySelector("#rhich-chat-form").addEventListener("submit", function (e) {
-    e.preventDefault();
+  form.addEventListener("submit", async (event) => {
 
-    const input = box.querySelector("#rhich-chat-input");
-    const question = input.value.trim().toLowerCase();
+    event.preventDefault();
+
+    const question = input.value.trim();
 
     if (!question) return;
 
-    messages.innerHTML +=
-      `<div class="rhich-message"><b>You:</b> ${escapeHTML(input.value)}</div>`;
-
-    let answer = "Sorry, I don't know that yet. Try asking about Stephanie's skills, projects or interests.";
-
-    if (question.includes("who") || question.includes("stephanie")) {
-      answer = "Stephanie Yeboah is a Computer Science student at Bosomtwe Girls' STEM High School and the creator of RHICH.";
-    } else if (question.includes("skill") || question.includes("program")) {
-      answer = "Stephanie has skills in HTML, Python, Microsoft Word and Graphic Design.";
-    } else if (question.includes("project") || question.includes("website")) {
-      answer = "Stephanie created RHICH Digital Portfolio using HTML, CSS and JavaScript.";
-    } else if (question.includes("career") || question.includes("interest")) {
-      answer = "Stephanie is interested in Cybersecurity and Graphic Design.";
-    } else if (question.includes("contact") || question.includes("email")) {
-      answer = "You can contact Stephanie at yeboahstephanie231@email.com.";
-    } else if (question.includes("school")) {
-      answer = "Stephanie studies Computer Science at Bosomtwe Girls' STEM High School.";
-    } else if (question.includes("hello") || question.includes("hi")) {
-      answer = "Hello! 👋 Welcome to RHICH. How can I help you?";
-    }
-
-    messages.innerHTML +=
-      `<div class="rhich-message"><b>RHICH:</b> ${escapeHTML(answer)}</div>`;
+    addMessage("You", question);
 
     input.value = "";
-    messages.scrollTop = messages.scrollHeight;
+    input.disabled = true;
+
+    addMessage("RHICH", "Thinking...");
+
+    try {
+
+      const response = await fetch(AI_URL, {
+        method: "POST",
+
+        headers: {
+          "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+          message: question
+        })
+      });
+
+      const data = await response.json();
+
+      const thinkingMessage = messages.lastElementChild;
+      thinkingMessage.remove();
+
+      if (!response.ok) {
+        throw new Error(data.error || "AI request failed.");
+      }
+
+      addMessage("RHICH", data.answer || "I couldn't generate an answer.");
+
+    } catch (error) {
+
+      messages.lastElementChild.remove();
+
+      addMessage(
+        "RHICH",
+        "Sorry! I'm having trouble connecting. Please try again."
+      );
+
+      console.error(error);
+
+    } finally {
+
+      input.disabled = false;
+      input.focus();
+      messages.scrollTop = messages.scrollHeight;
+
+    }
+
   });
 
-  function escapeHTML(text) {
-    const div = document.createElement("div");
-    div.textContent = text;
-    return div.innerHTML;
+  function addMessage(sender, text) {
+
+    const message = document.createElement("div");
+    message.className = "rhich-message";
+
+    const name = document.createElement("b");
+    name.textContent = sender + ": ";
+
+    const content = document.createElement("span");
+    content.textContent = text;
+
+    message.appendChild(name);
+    message.appendChild(content);
+
+    messages.appendChild(message);
+    messages.scrollTop = messages.scrollHeight;
   }
+
 })();
